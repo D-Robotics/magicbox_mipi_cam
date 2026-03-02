@@ -37,7 +37,7 @@ def generate_launch_description():
             description='mipi camera calibration file path'),
         DeclareLaunchArgument(
             'mipi_camera_calibration_file_path',
-            default_value='default',
+            default_value='/userdata/magicbox/app/ros_ws/install/mipi_cam/lib/mipi_cam/config/sc132gs_calibration_90.yaml',
             description='mipi camera calibration file path'),
         DeclareLaunchArgument(
             'mipi_out_format',
@@ -134,6 +134,7 @@ def generate_launch_description():
                 {"link_type": LaunchConfiguration('mipi_link_type')},
                 {"link_port": LaunchConfiguration('mipi_link_port')},
                 {"cal_alpha": LaunchConfiguration('mipi_cal_alpha')},
+                {"half_fps": True},
             ],
             arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')]
         )

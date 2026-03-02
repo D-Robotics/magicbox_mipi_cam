@@ -94,6 +94,7 @@ MipiCamNode::MipiCamNode(const rclcpp::NodeOptions& node_options)
   this->declare_parameter<double>("cal_alpha", nodePare_->cal_alpha_);
   this->declare_parameter<int>("stream_mode", nodePare_->stream_mode_);
   this->declare_parameter<bool>("sub_stream_enable", nodePare_->sub_stream_enable_);
+  this->declare_parameter<bool>("half_fps", half_fps_);
 
   this->get_parameter<std::string>("frame_id", frame_id_);
   this->get_parameter<std::string>("io_method", io_method_name_); 
@@ -123,6 +124,7 @@ MipiCamNode::MipiCamNode(const rclcpp::NodeOptions& node_options)
   this->get_parameter<double>("cal_alpha", nodePare_->cal_alpha_);
   this->get_parameter<int>("stream_mode", nodePare_->stream_mode_);
   this->get_parameter<bool>("sub_stream_enable", nodePare_->sub_stream_enable_);
+  this->get_parameter<bool>("half_fps", half_fps_);
 
   nodePare_->framerate_ = static_cast<int>(framerate);
 
@@ -539,6 +541,10 @@ void MipiCamNode::update(std::shared_ptr<Publisher_info> pub_info) {
       }
       return;
     }
+    if (half_fps_ == true){
+      pub_this_msg_ = !pub_this_msg_;
+      if (pub_this_msg_ == false) return;
+    }
 #if 0
     if ("realtime" == nodePare_->frame_ts_type_) {
       struct timespec ts;
@@ -587,6 +593,11 @@ void MipiCamNode::hbmemUpdate(std::shared_ptr<Publisher_hbmem_info> pub_info) {
           RCLCPP_WARN(rclcpp::get_logger("mipi_node"), "hbmemUpdate grab img failed");
         }
         return;
+      }
+      
+      if (half_fps_ == true){
+        pub_this_msg_ = !pub_this_msg_;
+        if (pub_this_msg_ == false) return;
       }
 #if 0
       if ("realtime" == nodePare_->frame_ts_type_) {

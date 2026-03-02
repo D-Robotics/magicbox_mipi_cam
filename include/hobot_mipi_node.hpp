@@ -106,6 +106,9 @@ class MipiCamNode : public rclcpp::Node {
   std::shared_ptr<struct NodePara> nodePare_;
   int m_bIsInit;
 
+  bool half_fps_ = false;
+  bool pub_this_msg_ = true;
+  
   std::atomic_bool is_imu_running_ = false;
   std::string imu_type_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr pub_imu_;
